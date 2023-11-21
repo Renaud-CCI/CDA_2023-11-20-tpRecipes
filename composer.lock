@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1e4471780de8c8a9795acd2a0e335ddc",
+    "content-hash": "b506968c077ca551795ccff69880bdd4",
     "packages": [
         {
             "name": "brick/math",
@@ -1526,6 +1526,53 @@
                 }
             ],
             "time": "2023-08-27T10:19:19+00:00"
+        },
+        {
+            "name": "halimtuhu/array-files",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/halimtuhu/array-files.git",
+                "reference": "ba4a8a45dd21ee916b00f09bd566d8f917855687"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/halimtuhu/array-files/zipball/ba4a8a45dd21ee916b00f09bd566d8f917855687",
+                "reference": "ba4a8a45dd21ee916b00f09bd566d8f917855687",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Halimtuhu\\ArrayFiles\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Halimtuhu\\ArrayFiles\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova field for distribute your files as array of object.",
+            "keywords": [
+                "array",
+                "files",
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/halimtuhu/array-files/issues",
+                "source": "https://github.com/halimtuhu/array-files/tree/v1.0"
+            },
+            "time": "2019-01-12T16:50:57+00:00"
         },
         {
             "name": "inertiajs/inertia-laravel",

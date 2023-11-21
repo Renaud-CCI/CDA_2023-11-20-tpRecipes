@@ -8,11 +8,12 @@
         "php": "^8.1",
         "darkaonline/l5-swagger": "^8.5",
         "guzzlehttp/guzzle": "^7.2",
+        "halimtuhu/array-files": "^1.0",
         "laravel/framework": "^10.10",
+        "laravel/nova": "4.24.1",
         "laravel/sanctum": "^3.3",
         "laravel/telescope": "^4.17",
-        "laravel/tinker": "^2.8",
-        "laravel/nova": "4.24.1"
+        "laravel/tinker": "^2.8"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

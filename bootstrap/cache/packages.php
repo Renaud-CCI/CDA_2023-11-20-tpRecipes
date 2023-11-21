@@ -10,6 +10,13 @@
       'L5Swagger' => 'L5Swagger\\L5SwaggerFacade',
     ),
   ),
+  'halimtuhu/array-files' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Halimtuhu\\ArrayFiles\\FieldServiceProvider',
+    ),
+  ),
   'inertiajs/inertia-laravel' => 
   array (
     'providers' => 
