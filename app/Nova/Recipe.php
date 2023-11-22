@@ -48,7 +48,7 @@ class Recipe extends Resource
             Text::make('Nom', 'name')->sortable(),
 
             Text::make('Ingrédients', function(){
-                $ingredients = json_decode($this->ingredients, true);
+                $ingredients = $this->ingredients;
                 $ingredientsString = '';
                 foreach ($ingredients as $key => $ingredient) {  
                     $ingredientsString .= $ingredient;         
