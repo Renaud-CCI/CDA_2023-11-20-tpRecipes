@@ -43,7 +43,6 @@
     39 => 'App\\Providers\\NovaServiceProvider',
     40 => 'App\\Providers\\RouteServiceProvider',
     41 => 'App\\Providers\\TelescopeServiceProvider',
-    42 => 'L5Swagger\\L5SwaggerServiceProvider',
   ),
   'eager' => 
   array (
@@ -75,7 +74,6 @@
     25 => 'App\\Providers\\NovaServiceProvider',
     26 => 'App\\Providers\\RouteServiceProvider',
     27 => 'App\\Providers\\TelescopeServiceProvider',
-    28 => 'L5Swagger\\L5SwaggerServiceProvider',
   ),
   'deferred' => 
   array (

@@ -170,7 +170,7 @@ return [
         App\Providers\NovaServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
-        L5Swagger\L5SwaggerServiceProvider::class,
+        // L5Swagger\L5SwaggerServiceProvider::class,
     ])->toArray(),
 
     /*
