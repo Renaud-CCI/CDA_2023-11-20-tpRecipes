@@ -11,10 +11,184 @@
     "paths": {
         "/api/recipes": {
             "get": {
-                "operationId": "b8215a8d42acbcd5579c220487522065",
+                "summary": "Get list of all recipes",
+                "description": "Returns list of recipess",
+                "operationId": "getAllRecipes",
                 "responses": {
                     "200": {
                         "description": "List of recipes"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Set a new recipe in DB",
+                "description": "Create recipe",
+                "operationId": "addRecipes",
+                "requestBody": {
+                    "description": "Recipe to add",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "ingredients",
+                                    "preparationTime",
+                                    "cookingTime",
+                                    "serves"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Spaghetti Bolognese"
+                                    },
+                                    "ingredients": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": [
+                                            "Spaghetti",
+                                            "Minced meat",
+                                            "Tomatoes",
+                                            "Onion",
+                                            "Garlic"
+                                        ]
+                                    },
+                                    "preparationTime": {
+                                        "type": "string",
+                                        "example": "15 minutes"
+                                    },
+                                    "cookingTime": {
+                                        "type": "string",
+                                        "example": "30 minutes"
+                                    },
+                                    "serves": {
+                                        "type": "integer",
+                                        "example": 4
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Create a new recipe"
+                    }
+                }
+            }
+        },
+        "/api/recipes/{id}": {
+            "get": {
+                "summary": "Get a recipe by its ID",
+                "description": "Returns a single recipe",
+                "operationId": "getRecipe",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the recipe to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Recipe details"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update a recipe",
+                "description": "Update a recipe by its ID",
+                "operationId": "updateRecipe",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the recipe to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Recipe to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Spaghetti Bolognese"
+                                    },
+                                    "ingredients": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": [
+                                            "Spatti",
+                                            "Minced meat",
+                                            "Tomatoes",
+                                            "Onion",
+                                            "Garlic"
+                                        ]
+                                    },
+                                    "preparationTime": {
+                                        "type": "string",
+                                        "example": "15 minutes"
+                                    },
+                                    "cookingTime": {
+                                        "type": "string",
+                                        "example": "30 minutes"
+                                    },
+                                    "serves": {
+                                        "type": "integer",
+                                        "example": 4
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update a recipe"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a recipe",
+                "description": "Delete a recipe by its ID",
+                "operationId": "deleteRecipe",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the recipe to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Delete a recipe"
+                    },
+                    "204": {
+                        "description": "Delete OK"
+                    },
+                    "500": {
+                        "description": "No entry with this ID"
                     }
                 }
             }
