@@ -68,12 +68,13 @@ class RecipeController extends BaseController
    *             type="integer"
    *         )
    *     ),
-   *     @OA\Response(response="200", description="Recipe details")
+   *     @OA\Response(response="200", description="Recipe details"),
+   *     @OA\Response(response="404", description="This recipe does not exist")
    * )
    */
   public function show($id)
   {
-      return Recipe::find($id);
+      return Recipe::findOrFail($id); //findOrFail permet de retourner erreur 404 si l'id n'existe pas
   }
 
   /**

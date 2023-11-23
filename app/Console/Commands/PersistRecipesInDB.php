@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Ingredient;
+use App\Models\Recipe;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +22,7 @@ class PersistRecipesInDB extends Command
      *
      * @var string
      */
-    protected $description = 'persist recipes in database with a json file';
+    protected $description = 'persist recipes and ingredients in database with a json file';
 
     /**
      * Execute the console command.
@@ -29,16 +31,22 @@ class PersistRecipesInDB extends Command
     {
         $recipes = json_decode(Storage::disk('local')->get('recipes.json'), true)['recipes'];
 
-        foreach ($recipes as $recipe) {
-            DB::table('recipes')->insert([
-                'name' => $recipe['name'],
-                'ingredients' => json_encode($recipe['ingredients'], true),
-                'preparationTime' => $recipe['preparationTime'],
-                'cookingTime' => $recipe['cookingTime'],
-                'serves' => $recipe['serves'],
-                'created_at' => now(),
-                'updated_at' => now(),
+        foreach ($recipes as $recipeData) {
+            $ingredientIds = [];
+
+            foreach ($recipeData['ingredients'] as $ingredientName) {
+                $ingredient = Ingredient::firstOrCreate(['name' => $ingredientName]);
+                $ingredientIds[] = $ingredient->id;
+            }
+
+            $recipe = Recipe::create([
+                'name' => $recipeData['name'],
+                'preparationTime' => $recipeData['preparationTime'],
+                'cookingTime' => $recipeData['cookingTime'],
+                'serves' => $recipeData['serves'],
             ]);
+
+            $recipe->ingredients()->attach($ingredientIds);
         }
     }
 }

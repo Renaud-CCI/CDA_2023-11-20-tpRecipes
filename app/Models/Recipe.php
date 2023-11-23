@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Recipe extends Model
 {
@@ -14,7 +15,7 @@ class Recipe extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'ingredients', 'preparationTime', 'cookingTime', 'serves'];
+    protected $fillable = ['name', 'preparationTime', 'cookingTime', 'serves'];
     protected $casts = [
         'ingredients' => 'array',
     ];
@@ -29,4 +30,9 @@ class Recipe extends Model
      *      ),
      * )
      */
+
+     public function ingredients(): BelongsToMany
+     {
+         return $this->belongsToMany(Ingredient::class);
+     }
 }
