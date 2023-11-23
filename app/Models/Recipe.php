@@ -16,9 +16,6 @@ class Recipe extends Model
      * @var array
      */
     protected $fillable = ['name', 'preparationTime', 'cookingTime', 'serves'];
-    protected $casts = [
-        'ingredients' => 'array',
-    ];
 
     /**
      * @OA\Info(

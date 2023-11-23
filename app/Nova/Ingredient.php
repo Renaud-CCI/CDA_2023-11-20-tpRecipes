@@ -5,18 +5,16 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Halimtuhu\ArrayFiles\ArrayFiles;
 
-class Recipe extends Resource
+class Ingredient extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Recipe>
+     * @var class-string<\App\Models\Ingredient>
      */
-    public static $model = \App\Models\Recipe::class;
+    public static $model = \App\Models\Ingredient::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -44,26 +42,7 @@ class Recipe extends Resource
     {
         return [
             ID::make()->sortable(),
-
             Text::make('Nom', 'name')->sortable(),
-
-            Text::make('Ingrédients', function(){
-                $ingredients = $this->ingredients;
-                $ingredientsString = '';
-                foreach ($ingredients as $key => $ingredient) {  
-                    $ingredientsString .= 
-                        ($key != count($ingredients) - 1) ?
-                        $ingredient->name . ', ' :
-                        $ingredient->name ;
-                }
-                return $ingredientsString;
-            }),
-
-            Text::make('Préparation', 'preparationTime')->sortable(),
-
-            Text::make('Cuisson', 'cookingTime')->sortable(),
-
-            Number::make('Couverts', 'serves')->sortable(),
         ];
     }
 
