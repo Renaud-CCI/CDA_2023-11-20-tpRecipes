@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 /**
  * @OA\Info(
- *   title="My API",
+ *   title="RecipesAPI",
  *   version="1.0",
  *   @OA\Contact(
  *     email="support@example.com",

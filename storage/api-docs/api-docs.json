@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "My API",
+        "title": "RecipesAPI",
         "contact": {
             "name": "Support Team",
             "email": "support@example.com"
@@ -9,8 +9,160 @@
         "version": "1.0"
     },
     "paths": {
+        "/api/ingredients": {
+            "get": {
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Get list of all ingredients",
+                "description": "Returns list of all ingredients",
+                "operationId": "getIngredientsList",
+                "responses": {
+                    "200": {
+                        "description": "List of ingredients"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Create a new ingredient",
+                "description": "Create a new ingredient and return the ingredient data",
+                "operationId": "createIngredient",
+                "requestBody": {
+                    "description": "Ingredient to be created",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "The name of the ingredient",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Ingredient created successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/api/ingredients/{id}": {
+            "get": {
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Get ingredient by ID",
+                "description": "Returns a single ingredient",
+                "operationId": "getIngredient",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the ingredient to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ingredient returned successfully"
+                    },
+                    "404": {
+                        "description": "Ingredient not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Update an existing ingredient",
+                "description": "Update an ingredient and return the ingredient data",
+                "operationId": "updateIngredient",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the ingredient to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Ingredient data to update",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "The name of the ingredient",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ingredient updated successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Ingredient not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Delete an ingredient",
+                "description": "Delete an ingredient and return a success message",
+                "operationId": "deleteIngredient",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the ingredient to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ingredient deleted successfully"
+                    },
+                    "404": {
+                        "description": "Ingredient not found"
+                    }
+                }
+            }
+        },
         "/api/recipes": {
             "get": {
+                "tags": [
+                    "Recipes"
+                ],
                 "summary": "Get list of all recipes",
                 "description": "Returns list of recipess",
                 "operationId": "getAllRecipes",
@@ -21,6 +173,9 @@
                 }
             },
             "post": {
+                "tags": [
+                    "Recipes"
+                ],
                 "summary": "Set a new recipe in DB",
                 "description": "Create recipe",
                 "operationId": "addRecipes",
@@ -45,14 +200,12 @@
                                     "ingredients": {
                                         "type": "array",
                                         "items": {
-                                            "type": "string"
+                                            "type": "integer"
                                         },
                                         "example": [
-                                            "Spaghetti",
-                                            "Minced meat",
-                                            "Tomatoes",
-                                            "Onion",
-                                            "Garlic"
+                                            1,
+                                            2,
+                                            3
                                         ]
                                     },
                                     "preparationTime": {
@@ -76,12 +229,18 @@
                 "responses": {
                     "200": {
                         "description": "Create a new recipe"
+                    },
+                    "400": {
+                        "description": "Invalid ingredient ID"
                     }
                 }
             }
         },
         "/api/recipes/{id}": {
             "get": {
+                "tags": [
+                    "Recipes"
+                ],
                 "summary": "Get a recipe by its ID",
                 "description": "Returns a single recipe",
                 "operationId": "getRecipe",
@@ -106,6 +265,9 @@
                 }
             },
             "put": {
+                "tags": [
+                    "Recipes"
+                ],
                 "summary": "Update a recipe",
                 "description": "Update a recipe by its ID",
                 "operationId": "updateRecipe",
@@ -134,14 +296,12 @@
                                     "ingredients": {
                                         "type": "array",
                                         "items": {
-                                            "type": "string"
+                                            "type": "integer"
                                         },
                                         "example": [
-                                            "Spaghetti",
-                                            "Minced meat",
-                                            "Tomatoes",
-                                            "Onion",
-                                            "Garlic"
+                                            1,
+                                            2,
+                                            3
                                         ]
                                     },
                                     "preparationTime": {
@@ -165,10 +325,16 @@
                 "responses": {
                     "200": {
                         "description": "Update a recipe"
+                    },
+                    "400": {
+                        "description": "Invalid ingredient ID"
                     }
                 }
             },
             "delete": {
+                "tags": [
+                    "Recipes"
+                ],
                 "summary": "Delete a recipe",
                 "description": "Delete a recipe by its ID",
                 "operationId": "deleteRecipe",

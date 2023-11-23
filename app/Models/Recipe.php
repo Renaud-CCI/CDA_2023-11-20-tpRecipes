@@ -17,16 +17,6 @@ class Recipe extends Model
      */
     protected $fillable = ['name', 'preparationTime', 'cookingTime', 'serves'];
 
-    /**
-     * @OA\Info(
-     *      version="1.0.0",
-     *      title="L5 Swagger OpenApi Test",
-     *      description="L5 Swagger OpenApi description",
-     *      @OA\Contact(
-     *          email="your-email@example.com"
-     *      ),
-     * )
-     */
 
      public function ingredients(): BelongsToMany
      {
