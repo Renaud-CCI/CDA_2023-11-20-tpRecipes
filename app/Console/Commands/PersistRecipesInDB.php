@@ -3,14 +3,14 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Services\ImportRecipesFromJson;
+use App\Services\ImporterFactory;
 use App\Repositories\RecipeRepository;
 use App\Repositories\IngredientRepository;
 use App\Repositories\RepositoryInterface;
 
 class PersistRecipesInDB extends Command
 {
-    private ImportRecipesFromJson $importedFile;
+    private ImporterFactory $importerFactory;
 
     private RepositoryInterface $recipeRepository;
 
@@ -36,11 +36,11 @@ class PersistRecipesInDB extends Command
 
 
 
-    public function __construct(ImportRecipesFromJson $importedFile, RecipeRepository $recipeRepository, IngredientRepository $ingredientRepository)
+    public function __construct(ImporterFactory $importerFactory, RecipeRepository $recipeRepository, IngredientRepository $ingredientRepository)
     {
         parent::__construct();
 
-        $this->importedFile = $importedFile;
+        $this->importerFactory = $importerFactory;
         $this->recipeRepository = $recipeRepository;
         $this->ingredientRepository = $ingredientRepository;
     }
@@ -48,7 +48,8 @@ class PersistRecipesInDB extends Command
     public function handle()
     {
         $filename = $this->argument('filename');
-        $recipes = $this->importedFile->extract($filename);
+        $importer = $this->importerFactory->chooseImporter(pathinfo($filename, PATHINFO_EXTENSION));
+        $recipes = $importer->extract($filename);
 
         foreach ($recipes as $recipeData) {
             $ingredientIds = [];
