@@ -20,9 +20,9 @@ class ImporterJob implements ShouldQueue
 
     private ImporterFactory $importerFactory;
 
-    private RepositoryInterface $recipeRepository;
+    private RecipeRepository $recipeRepository;
 
-    private RepositoryInterface $ingredientRepository;
+    private IngredientRepository $ingredientRepository;
 
     private string $filename;
 
@@ -31,22 +31,26 @@ class ImporterJob implements ShouldQueue
         $this->filename = $filename;
     }
 
-    public function handle(): void
+    public function handle(ImporterFactory $importerFactory, RecipeRepository $recipeRepository, IngredientRepository $ingredientRepository): void
     {
-        $importer = $this->importerFactory->chooseImporter(pathinfo($this->filename, PATHINFO_EXTENSION));
+        // $this->importerFactory = $importerFactory;
+        // $this->recipeRepository = $recipeRepository;
+        // $this->ingredientRepository = $ingredientRepository;
+        
+        $importer = $importerFactory->chooseImporter(pathinfo($this->filename, PATHINFO_EXTENSION));
         $recipes = $importer->extract($this->filename);
 
         foreach ($recipes as $recipeData) {
             $ingredientIds = [];
 
             foreach ($recipeData['ingredients'] as $ingredientName) {
-                $ingredient = $this->ingredientRepository->create(['name' => $ingredientName]);
+                $ingredient = $ingredientRepository->create(['name' => $ingredientName]);
                 $ingredientIds[] = $ingredient->id;
             }
 
             $recipeData['ingredients'] = $ingredientIds;
 
-            $this->recipeRepository->create($recipeData);
+            $recipeRepository->create($recipeData);
 
         }
     }
