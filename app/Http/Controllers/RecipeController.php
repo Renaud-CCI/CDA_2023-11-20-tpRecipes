@@ -2,16 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ingredient;
+use App\Repositories\RecipeRepository;
+use App\Repositories\IngredientRepository;
+use App\Repositories\RepositoryInterface;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
-use App\Models\Recipe;
 use Illuminate\Http\Request;
 
 class RecipeController extends BaseController
 {
   use AuthorizesRequests, ValidatesRequests;
+
+  private RepositoryInterface $recipeRepository;
+  private RepositoryInterface $ingredientRepository;
+
+  public function __construct(RecipeRepository $recipeRepository, IngredientRepository $ingredientRepository)
+  {
+    $this->recipeRepository = $recipeRepository;
+    $this->ingredientRepository = $ingredientRepository;
+  }
 
   /**
   * @OA\Get(
@@ -19,13 +29,13 @@ class RecipeController extends BaseController
   *     tags={"Recipes"},
   *     operationId="getAllRecipes",
   *     summary="Get list of all recipes",
-  *     description="Returns list of recipess",
+  *     description="Returns list of recipes",
   *     @OA\Response(response="200", description="List of recipes")
   * )
   */
   public function index()
   {
-    return Recipe::with('ingredients')->get();
+    return $this->recipeRepository->getAll();
   }  
 
   /**
@@ -53,17 +63,17 @@ class RecipeController extends BaseController
   */
   public function store(Request $request)
   {
-      $ingredientIds = $request->input('ingredients');
-      foreach ($ingredientIds as $ingredientId) {
-          if (!Ingredient::find($ingredientId)) {
-              return response()->json(['error' => 'Invalid ingredient ID: ' . $ingredientId], 400);
-          }
-      }
+    $ingredientIds = $request->input('ingredients');
+    foreach ($ingredientIds as $ingredientId) {
+        if (!$this->ingredientRepository->find($ingredientId)) {
+            return response()->json(['error' => 'Invalid ingredient ID: ' . $ingredientId], 400);
+        }
+    }
 
-      $recipe = Recipe::create($request->except('ingredients'));
-      $recipe->ingredients()->attach($ingredientIds);
+    $recipe = $this->recipeRepository->create($request->all());
+    
 
-      return response()->json($recipe->load('ingredients'), 201);
+    return response()->json($recipe->load('ingredients'), 201);
   }
 
 
@@ -89,7 +99,7 @@ class RecipeController extends BaseController
   */
   public function show($id)
   {
-      return Recipe::findOrFail($id); //findOrFail permet de retourner erreur 404 si l'id n'existe pas
+      return $this->recipeRepository->getById($id);
   }
 
   /**
@@ -126,18 +136,16 @@ class RecipeController extends BaseController
   */
   public function update(Request $request, $id)
   {
-      $ingredientIds = $request->input('ingredients');
-      foreach ($ingredientIds as $ingredientId) {
-          if (!Ingredient::find($ingredientId)) {
-              return response()->json(['error' => 'Invalid ingredient ID: ' . $ingredientId], 400);
-          }
-      }
+    $ingredientIds = $request->input('ingredients');
+    foreach ($ingredientIds as $ingredientId) {
+        if (!$this->ingredientRepository->find($ingredientId)) {
+            return response()->json(['error' => 'Invalid ingredient ID: ' . $ingredientId], 400);
+        }
+    }
 
-      $recipe = Recipe::findOrFail($id);
-      $recipe->update($request->except('ingredients'));
-      $recipe->ingredients()->sync($ingredientIds);
+    $recipe = $this->recipeRepository->update($id, $request);
 
-      return response()->json($recipe->load('ingredients'), 200);
+    return response()->json($recipe->load('ingredients'), 200);
   }
 
   /**
@@ -163,11 +171,11 @@ class RecipeController extends BaseController
   */
   public function destroy($id)
   {
-    $recipe = Recipe::find($id);
+    $recipe = $this->recipeRepository->find($id);
     if (!$recipe) {
       return response()->json(['message' => 'No entry with this ID'], 500);
     }
-    $recipe->delete();
-    return response()->json(null, 204);
+    $this->recipeRepository->delete($recipe);
+    return response()->json(['message' => 'Recipe deleted successfully'], 204);
   }
 }

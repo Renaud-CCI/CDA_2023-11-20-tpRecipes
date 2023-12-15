@@ -2,18 +2,19 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Ingredient;
-use App\Models\Recipe;
 use Illuminate\Console\Command;
 use App\Services\ImportRecipesFromJson;
+use App\Repositories\RecipeRepository;
+use App\Repositories\IngredientRepository;
+use App\Repositories\RepositoryInterface;
 
 class PersistRecipesInDB extends Command
 {
+    private ImportRecipesFromJson $importedFile;
 
-    /**
-     * @var ImportRecipesFromJson
-     */
-    private $importedFile;
+    private RepositoryInterface $recipeRepository;
+
+    private RepositoryInterface $ingredientRepository;
 
     /**
      * The name and signature of the console command.
@@ -35,11 +36,13 @@ class PersistRecipesInDB extends Command
 
 
 
-    public function __construct(ImportRecipesFromJson $importedFile)
+    public function __construct(ImportRecipesFromJson $importedFile, RecipeRepository $recipeRepository, IngredientRepository $ingredientRepository)
     {
         parent::__construct();
 
         $this->importedFile = $importedFile;
+        $this->recipeRepository = $recipeRepository;
+        $this->ingredientRepository = $ingredientRepository;
     }
 
     public function handle()
@@ -51,18 +54,13 @@ class PersistRecipesInDB extends Command
             $ingredientIds = [];
 
             foreach ($recipeData['ingredients'] as $ingredientName) {
-                $ingredient = Ingredient::firstOrCreate(['name' => $ingredientName]);
+                $ingredient = $this->ingredientRepository->create(['name' => $ingredientName]);
                 $ingredientIds[] = $ingredient->id;
             }
 
-            $recipe = Recipe::firstOrCreate([
-                'name' => $recipeData['name'],
-                'preparationTime' => $recipeData['preparationTime'],
-                'cookingTime' => $recipeData['cookingTime'],
-                'serves' => $recipeData['serves'],
-            ]);
+            $recipeData['ingredients'] = $ingredientIds;
 
-            $recipe->ingredients()->sync($ingredientIds);
+            $this->recipeRepository->create($recipeData);
         }
     }
 }

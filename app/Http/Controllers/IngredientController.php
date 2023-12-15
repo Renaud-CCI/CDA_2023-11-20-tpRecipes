@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\RepositoryInterface;
+use App\Repositories\IngredientRepository;
 use Illuminate\Http\Request;
 use App\Models\Ingredient;
 
 class IngredientController extends Controller
 {
+
+    private RepositoryInterface $ingredientRepository;
+
+    public function __construct(IngredientRepository $ingredientRepository)
+    {
+        $this->ingredientRepository = $ingredientRepository;
+    }
+
     /**
     * @OA\Post(
     *     path="/api/ingredients",
@@ -33,7 +43,7 @@ class IngredientController extends Controller
     */
     public function store(Request $request)
     {
-        $ingredient = Ingredient::create($request->all());
+        $ingredient = $this->ingredientRepository->create($request->all());
         return response()->json($ingredient, 201);
     }
 
@@ -49,7 +59,7 @@ class IngredientController extends Controller
     */
     public function index()
     {
-        return Ingredient::all();
+        return $this->ingredientRepository->getAll();
     }
 
     /**
@@ -78,7 +88,7 @@ class IngredientController extends Controller
     */
     public function show(string $id)
     {
-        $ingredient = Ingredient::findOrFail($id);
+        $ingredient = $this->ingredientRepository->getById($id);
         return $ingredient;
     }
 
@@ -118,10 +128,8 @@ class IngredientController extends Controller
     * )
     */
     public function update(Request $request, string $id)
-    {
-        $ingredient = Ingredient::findOrFail($id);
-        $ingredient->update($request->all());
-        return $ingredient;
+    {        
+        return $this->ingredientRepository->update($id, $request->all());
     }
 
     /**
@@ -150,8 +158,11 @@ class IngredientController extends Controller
     */
     public function destroy(string $id)
     {
-        $ingredient = Ingredient::findOrFail($id);
-        $ingredient->delete();
-        return response()->json(['message' => 'Ingredient deleted successfully']);
+        $ingredient = $this->ingredientRepository->find($id);
+        if (!$ingredient) {
+        return response()->json(['message' => 'No entry with this ID'], 500);
+        }
+        $this->ingredientRepository->delete($ingredient);
+        return response()->json(['message' => 'Ingredient deleted successfully'], 200);
     }
 }

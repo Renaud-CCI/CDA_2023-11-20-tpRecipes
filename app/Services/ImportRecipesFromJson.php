@@ -2,8 +2,9 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
+use App\Services\ImporterInterface;
 
-class ImportRecipesFromJson
+class ImportRecipesFromJson implements ImporterInterface
 {
     public function extract(string $filename): array
     {
